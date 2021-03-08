@@ -15,7 +15,7 @@ The project is in its most basic implementation sofar, but in the near future, I
   
  
 <h2>Project Motivation</h2>
-I wished to analyze the effect of frequent lineup changes made in Chelsea FC's early 2020-2021 season on their performance, but couldn't find online datasets that provided lineups for all matches all consolidated in one source. So, I sought out to create those datasets myself by web scraping and automation, and I kept expanding the scope from thereon to include this information for other teams and across different years.
+I wished to analyze the effect of frequent lineup changes made in Chelsea FC's early 2020-2021 season on their performance, but couldn't find online datasets that provided lineups for all matches consolidated in one source. So, I sought out to create those datasets myself by web scraping and automation, and I kept expanding the scope from thereon to include this information for other teams and across different years.
 
 
 <h2>Current Implementation/Future Steps</h2>
