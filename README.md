@@ -19,8 +19,9 @@ I wished to analyze the effect of frequent lineup changes made in Chelsea FC's e
 
 
 <h2>Current Implementation/Future Steps</h2>
-<ul>
+
 The current implementation extracts, per match, the following information:
+<ul>
 <li> Date </li>
 <li> Competition</li>
 <li> Scores, including xG or Penalties </li>
@@ -28,3 +29,10 @@ The current implementation extracts, per match, the following information:
 <li> Stats such as Passing, Shots, Possession </li>
 <li> Formation & Lineups </li>
 </ul>
+
+In the near future, I hope to implement the following:
+<ul>
+ <li> Extract various match events </li>
+ <li> Adding more features for dataset generation, e.g. get all formations in one file, or generate stats per player in a team </li>
+ <li> Creating a GUI for the project that takes few variables as input rather than have people edit code </li>
+ </ul>
