@@ -65,6 +65,7 @@ for link in links: #to iterate through all links of matches
     rowFormation = ["Formations",driver.find_element_by_xpath('//div[@class="lineup" and @id="a"]//th[@colspan="2"]').text, \
                     driver.find_element_by_xpath('//div[@class="lineup" and @id="b"]//th[@colspan="2"]').text]
 
+
     LineupsA = driver.find_elements_by_xpath('//div[@class="lineup" and @id="a"]//table//tbody//tr//a')
     LineupsB = driver.find_elements_by_xpath('//div[@class="lineup" and @id="b"]//table//tbody//tr//a')
     PlayerListA = []
@@ -123,16 +124,35 @@ for link in links: #to iterate through all links of matches
     worksheet.write('B14', rowFormation[1])
     worksheet.write('C14', rowFormation[2])
 
+    worksheet.set_column('A:A', 12)
+    worksheet.set_column('B:B', 22)
+    worksheet.set_column('C:C', 22)
+
     row = 15
     col = 1
+    i=0
+    worksheet.write(row, col - 1, "Starting XI")
     for player in PlayerListA:
+        i+=1
         worksheet.write(row, col, player)
         row += 1
+
+        if (i==11):
+            worksheet.write(row,col,'')
+            row += 1
+            worksheet.write(row,col-1, "Bench")
     row = 15
     col = 2
+
+    j=0
     for player in PlayerListB:
+        j += 1
         worksheet.write(row, col, player)
         row += 1
+
+        if (j == 11):
+            worksheet.write(row, col, '')
+            row += 1
 
     workbook.close()
     if x>4:
