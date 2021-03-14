@@ -5,8 +5,8 @@ from selenium import webdriver
 import xlsxwriter
 from datetime import datetime
 import pandas as pd
-#from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import NoSuchElementException
+
 
 ## Information on Computer, League, Team, Years, Competition
 ComputerUsername= "hsnsh"
@@ -42,18 +42,22 @@ for link in links: # to iterate through all links of matches
     rowScore = ["", driver.find_element_by_xpath('//div[@class="scorebox"]//div[1]//div[@class="scores"]//div[1]').text, \
                 driver.find_element_by_xpath('//div[@class="scorebox"]//div[2]//div[@class="scores"]//div[1]').text]
 
-    PenXg = driver.find_element_by_xpath('//div[@class="scorebox"]//div[@class="scores"]//div[2]').get_attribute(
-        'class')
-    if (PenXg == "score_pen"):
-        PenXg = "Penalties"
-    elif PenXg == "score_xg":
-        PenXg = "xg"
-    else:
-        PenXg = "Other"
+    try:
+        driver.find_element_by_xpath('//div[@class="scorebox"]//div[@class="scores"]//div[2]').click()
+        PenXg = driver.find_element_by_xpath('//div[@class="scorebox"]//div[@class="scores"]//div[2]').get_attribute('class')
+        if (PenXg == "score_pen"):
+            PenXg = "Penalties"
+        elif PenXg == "score_xg":
+            PenXg = "xg"
+        else:
+            PenXg = "Other"
+        rowPenXg = [PenXg,
+                    driver.find_element_by_xpath('//div[@class="scorebox"]//div[1]//div[@class="scores"]//div[2]').text, \
+                    driver.find_element_by_xpath('//div[@class="scorebox"]//div[2]//div[@class="scores"]//div[2]').text]
 
-    rowPenXg = [PenXg,
-                driver.find_element_by_xpath('//div[@class="scorebox"]//div[1]//div[@class="scores"]//div[2]').text, \
-                driver.find_element_by_xpath('//div[@class="scorebox"]//div[2]//div[@class="scores"]//div[2]').text]
+    except NoSuchElementException:
+        print('Xg for {0} not found'.format('{0}-{1}-{2}'.format(matchDate, TeamA, TeamB)))
+        rowPenXg=["xg","",""]
 
     rowManager = ["Manager",
                   driver.find_element_by_xpath('//div[@class="scorebox"]//div[1]//div[@class="datapoint"][1]').text.replace("Manager: ",''), \
@@ -361,7 +365,7 @@ for link in links: # to iterate through all links of matches
     workbook.close()
 
 
-    if x > 3:  #specify number of matches you want to extract here: testing purposes
+    if x > 20:  #specify number of matches you want to extract here: testing purposes
         break
 
 
