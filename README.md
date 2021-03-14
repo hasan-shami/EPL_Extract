@@ -39,3 +39,6 @@ In the near future, I hope to implement the following:
  <li> Adding more features for dataset generation, e.g. get all formations in one file, or generate stats per player in a team </li>
  <li> Creating a GUI for the project that takes few variables as input rather than have people edit code </li>
  </ul>
+ 
+ ![image](https://user-images.githubusercontent.com/40544032/111081600-b81de200-850c-11eb-89cc-73f87489064f.png)
+ 
