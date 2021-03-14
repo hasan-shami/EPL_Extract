@@ -40,9 +40,9 @@ In the near future, I hope to implement the following:
  <li> Creating a GUI for the project that takes few variables as input rather than have people edit code </li>
  </ul>
  
- <p>![image](https://user-images.githubusercontent.com/40544032/111081600-b81de200-850c-11eb-89cc-73f87489064f.png)</p>
+![image](https://user-images.githubusercontent.com/40544032/111081600-b81de200-850c-11eb-89cc-73f87489064f.png)
  
- <p> 
+
 ![image](https://user-images.githubusercontent.com/40544032/111081731-6d509a00-850d-11eb-81b5-974da193b469.png)
-</p>
+
  
