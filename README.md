@@ -11,6 +11,8 @@ The project is in its most basic implementation sofar, but in the near future, I
 <li>Anaconda distribution of Python 3.7</li>
 <li>Selenium library on Python and Chrome extension, to scrape websites (make sure you install the appropriate versions </li>
 <li>xlsxwriter library on Python, to write information on Excel files</li>
+<li>Pandas library on Python, for stats tables and future computations</li>
+<li> fbref website, as a source for all stats </li>
  </ul>
   
  
@@ -28,6 +30,7 @@ The current implementation extracts, per match, the following information:
 <li> Team Managers & Captains </li>
 <li> Stats such as Passing, Shots, Possession </li>
 <li> Formation & Lineups </li>
+<li> (new) Stats per player per team, on different sheets </li>
 </ul>
 
 In the near future, I hope to implement the following:
