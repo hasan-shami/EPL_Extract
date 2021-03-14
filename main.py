@@ -1,10 +1,10 @@
 # Code performing basic functionalities of web scraping and extraction
 # Later version will include GUIs
 
-
 from selenium import webdriver
 import xlsxwriter
 from datetime import datetime
+import pandas as pd
 #from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
 
@@ -25,10 +25,10 @@ a=driver.find_elements_by_xpath('//table[@class="stats_table sortable min_width 
 
 links=[]
 for elem in a:
-    links.append(elem.get_attribute("href"))
+    links.append(elem.get_attribute("href")) # Get links of all matches
 
 x=0
-for link in links: #to iterate through all links of matches
+for link in links: # to iterate through all links of matches
     x+=1 # We're only getting the data for a few matches now
     driver.get(link)
 
@@ -87,7 +87,8 @@ for link in links: #to iterate through all links of matches
                 driver.find_element_by_xpath('//div[@id="team_stats"]//tbody//tr[7]//td[1]//div//div[1]').text, \
                 driver.find_element_by_xpath('//div[@id="team_stats"]//tbody//tr[7]//td[2]//div//div[1]').text]
 
-    workbook = xlsxwriter.Workbook('{0}-{1}-{2}.xlsx'.format(matchDate, TeamA, TeamB))
+    filepath='{0}-{1}-{2}.xlsx'.format(matchDate, TeamA, TeamB)
+    workbook = xlsxwriter.Workbook(filepath)
     worksheet = workbook.add_worksheet()
     bold = workbook.add_format({'bold': 1})
     worksheet.write('A1', "Date", bold)
@@ -154,11 +155,214 @@ for link in links: #to iterate through all links of matches
             worksheet.write(row, col, '')
             row += 1
 
+    PlayerNamesA = driver.find_elements_by_xpath\
+        ('//div[contains(@id,"all_player_stats")][1]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//th//a')
+    PlayerNamesB = driver.find_elements_by_xpath\
+        ('//div[contains(@id,"all_player_stats")][2]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//th//a')
+    list_PlayerNamesA=[]
+    list_PlayerNamesB=[]
+
+    NumbersA=driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][1]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[1]')
+    NumbersB= driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][2]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[1]')
+    list_NumbersA=[]
+    list_NumbersB=[]
+
+    NationalityA= driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][1]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[2]//a') #note: get last 3 characters only
+    NationalityB = driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][2]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[2]//a')  # note: get last 3 characters only
+    list_NationalityA=[]
+    list_NationalityB=[]
+
+    PositionA= driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][1]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[3]')
+    PositionB= driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][2]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[3]')
+    list_PositionA=[]
+    list_PositionB=[]
+
+
+    AgeA= driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][1]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[4]')
+    AgeB= driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][2]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[4]')
+    list_AgeA=[]
+    list_AgeB=[]
+
+    MinutesA= driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][1]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[5]')
+    MinutesB = driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][2]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[5]')
+    list_MinutesA=[]
+    list_MinutesB=[]
+
+    GoalsA= driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][1]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[6]')
+    GoalsB= driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][2]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[6]')
+    list_GoalsA=[]
+    list_GoalsB=[]
+
+    AssistsA=driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][1]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[7]')
+    AssistsB=driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][2]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[7]')
+    list_AssistsA=[]
+    list_AssistsB=[]
+
+    PkA=driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][1]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[8]')
+    PkB=driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][2]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[8]')
+    list_PkA=[]
+    list_PkB=[]
+
+    PKattA=driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][1]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[9]')
+    PKattB=driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][2]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[9]')
+    list_PKattA=[]
+    list_PKattB=[]
+
+    ShotsA=driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][1]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[10]')
+    ShotsB=driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][2]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[10]')
+    list_ShotsA=[]
+    list_ShotsB=[]
+
+    ShotsOnTargetA= driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][1]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[11]')
+    ShotsOnTargetB= driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][2]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[11]')
+    list_ShotsOnTargetA=[]
+    list_ShotsOnTargetB=[]
+
+    YellowCardsA=driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][1]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[12]')
+    YellowCardsB=driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][2]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[12]')
+    list_YellowCardsA=[]
+    list_YellowCardsB=[]
+
+    RedCardsA=driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][1]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[13]')
+    RedCardsB=driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][2]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[13]')
+    list_RedCardsA=[]
+    list_RedCardsB=[]
+
+    TouchesA=driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][1]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[14]')
+    TouchesB=driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][2]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[14]')
+    list_TouchesA=[]
+    list_TouchesB=[]
+
+    PressuresA=driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][1]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[15]')
+    PressuresB=driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][2]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[15]')
+    list_PressA=[]
+    list_PressB=[]
+
+    TacklesA=driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][1]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[16]')
+    TacklesB=driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][2]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[16]')
+    list_TacklesA=[]
+    list_TacklesB=[]
+
+    InterceptionsA=driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][1]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[17]')
+    InterceptionsB=driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][2]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[17]')
+    list_InterceptionsA=[]
+    list_InterceptionsB=[]
+
+    BlocksA=driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][1]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[18]')
+    BlocksB=driver.find_elements_by_xpath \
+        ('//div[contains(@id,"all_player_stats")][2]//div[contains(@id,"div_stats")]//table[contains(@id,"stats") and contains(@id,"summary")]//tbody//td[18]')
+    list_BlocksA=[]
+    list_BlocksB=[]
+
+    for player in range(len(PlayerNamesA)):
+        list_PlayerNamesA.append(PlayerNamesA[player].text)
+        list_NumbersA.append(NumbersA[player].text)
+        list_NationalityA.append(NationalityA[player].text[-3:]) #only last 3 characters
+        list_PositionA.append(PositionA[player].text)
+        list_AgeA.append(AgeA[player].text)
+        list_MinutesA.append(MinutesA[player].text)
+        list_GoalsA.append(GoalsA[player].text)
+        list_AssistsA.append(AssistsA[player].text)
+        list_PkA.append(PkA[player].text)
+        list_PKattA.append(PKattA[player].text)
+        list_ShotsA.append(ShotsA[player].text)
+        list_ShotsOnTargetA.append(ShotsOnTargetA[player].text)
+        list_YellowCardsA.append(YellowCardsA[player].text)
+        list_RedCardsA.append(RedCardsA[player].text)
+        list_TouchesA.append(TouchesA[player].text)
+        list_PressA.append(PressuresA[player].text)
+        list_TacklesA.append(TacklesA[player].text)
+        list_InterceptionsA.append(InterceptionsA[player].text)
+        list_BlocksA.append(BlocksA[player].text)
+
+    for player in range(len(PlayerNamesB)):
+        list_PlayerNamesB.append(PlayerNamesB[player].text)
+        list_NumbersB.append(NumbersB[player].text)
+        list_NationalityB.append(NationalityB[player].text[-3:]) #only last 3 characters
+        list_PositionB.append(PositionB[player].text)
+        list_AgeB.append(AgeB[player].text)
+        list_MinutesB.append(MinutesB[player].text)
+        list_GoalsB.append(GoalsB[player].text)
+        list_AssistsB.append(AssistsB[player].text)
+        list_PkB.append(PkB[player].text)
+        list_PKattB.append(PKattB[player].text)
+        list_ShotsB.append(ShotsB[player].text)
+        list_ShotsOnTargetB.append(ShotsOnTargetB[player].text)
+        list_YellowCardsB.append(YellowCardsB[player].text)
+        list_RedCardsB.append(RedCardsB[player].text)
+        list_TouchesB.append(TouchesB[player].text)
+        list_PressB.append(PressuresB[player].text)
+        list_TacklesB.append(TacklesB[player].text)
+        list_InterceptionsB.append(InterceptionsB[player].text)
+        list_BlocksB.append(BlocksB[player].text)
+
+    columnList=['Name', '#','Nation' ,'POS','Age','MinutesPlayed','Goals','Assists','PK','PKatt',\
+                'Shots','ShotsOnTarget','YellowCards','RedCards','Touches','Pressures','Tackles',\
+                'Interceptions','Blocks']
+    dfA=pd.DataFrame(data=list(zip(list_PlayerNamesA,list_NumbersA,list_NationalityA,list_PositionA,list_AgeA, \
+                                  list_MinutesA, list_GoalsA,list_AssistsA, list_PkA,list_PKattA ,list_ShotsA, \
+                                  list_ShotsOnTargetA, list_YellowCardsA, list_RedCardsA, list_TouchesA,list_PressA, \
+                                  list_TacklesA, list_InterceptionsA, list_BlocksA)),columns=columnList)
+
+    dfB=pd.DataFrame(data=list(zip(list_PlayerNamesB,list_NumbersB,list_NationalityB,list_PositionB,list_AgeB, \
+                                  list_MinutesB, list_GoalsB,list_AssistsB, list_PkB,list_PKattB ,list_ShotsB, \
+                                  list_ShotsOnTargetB, list_YellowCardsB, list_RedCardsB, list_TouchesB,list_PressB, \
+                                  list_TacklesB, list_InterceptionsB, list_BlocksB)),columns=columnList)
+
+
+    writer=pd.ExcelWriter(filepath,engine='xlsxwriter')
+    writer.book=workbook
+    dfA.to_excel(writer,sheet_name='{0} Stats'.format(TeamA),index=False)
+    dfB.to_excel(writer,sheet_name='{0} Stats'.format(TeamB),index=False)
+
+    worksheetA=writer.sheets['{0} Stats'.format(TeamA)]
+    worksheetA.set_column('A:A',21)
+
+    worksheetB=writer.sheets['{0} Stats'.format(TeamB)]
+    worksheetB.set_column('A:A',21)
+
+    writer.save()
+    writer.close()
     workbook.close()
-    if x>4:
+
+
+    if x > 3:  #specify number of matches you want to extract here: testing purposes
         break
-
-
 
 
 
