@@ -6,20 +6,14 @@ import xlsxwriter
 from datetime import datetime
 import pandas as pd
 from selenium.common.exceptions import NoSuchElementException
+import constants
 
 
-## Information on Computer, League, Team, Years, Competition
-ComputerUsername= "hsnsh"
-league = "Premier League"
-team= "Chelsea"    # Note, may want to scrape for exact name here later
-Year= "2019-2020"
-Competition="" # Dropdown menu with multiple selections, when GUI is implemented
 
-# Edit with your chrome driver executable location
-path_chromedriver = r'C:\Users\{0}\OneDrive\Documents\chromedriver_win32\chromedriver.exe'.format(ComputerUsername)
-driver = webdriver.Chrome(executable_path=path_chromedriver)
 
-driver.get('https://fbref.com/en/squads/cff3d9bb/{0}/{1}-Stats'.format(Year, team))
+
+driver = webdriver.Chrome(executable_path=constants.path_chromedriver)
+driver.get('https://fbref.com/en/squads/cff3d9bb/{0}/{1}-Stats'.format(constants.Year, constants.team))
 a=driver.find_elements_by_xpath('//table[@class="stats_table sortable min_width now_sortable sticky_table eq1 re1 le1" and @id = "matchlogs_for"]//tbody//tr//th//a[@href]')
 
 
